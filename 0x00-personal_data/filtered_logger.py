@@ -89,3 +89,33 @@ def get_db():
         return db
     except mysql.connector.Error as err:
         print('Error connecting to DB: ', err)
+
+
+def main():
+    """
+    Main function to retrieve and filter data from the users table
+    """
+    # Configure logger
+    logging.basicConfig(
+        level=logging.INFO,
+        format='[HOLBERTON] user_data %(levelname)s %(asctime)s: %(message)s')
+    # Obtain database connection
+    db_connection = get_db()
+
+    # Retrieve all rows from users table
+    cursor = db_connection.cursor(dictionary=False)
+    cursor.execute('SELECT * FROM users')
+    rows = cursor.fetchall()
+
+    for row in rows:
+        filtered_row = {key: '***' if key in PII_FIELDS else value for
+                        key, value in row.items()}
+        logging.info(filtered_row)
+
+        # Close cursor and database connection
+        cursor.close()
+        db_connection.close()
+
+
+if __name__ == "__main__":
+    main()
