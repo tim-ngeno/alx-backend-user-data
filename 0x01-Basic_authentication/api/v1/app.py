@@ -4,7 +4,7 @@ Route module for the API
 """
 from os import getenv
 from api.v1.views import app_views
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, Response
 from flask_cors import (CORS, cross_origin)
 import os
 
@@ -25,7 +25,7 @@ if auth_type:
 
 
 @app.before_request
-def before_request():
+def before_request() -> str:
     """ Handler for before each request
     """
     if auth is None:
@@ -46,21 +46,21 @@ def before_request():
 
 
 @app.errorhandler(401)
-def unauthorized_error_handler(error):
+def unauthorized_error_handler(error) -> Response:
     """ Unauthorized error handler
     """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_error_handler(error):
+def forbidden_error_handler(error) -> Response:
     """ Forbidden error handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
 
 @app.errorhandler(404)
-def not_found(error) -> str:
+def not_found(error) -> Response:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
