@@ -30,11 +30,11 @@ def stats() -> Response:
 def unauthorized_handler() -> str:
     """ Raises a 401 error using abort
     """
-    abort(401)
+    return abort(401)
 
 
 @app_views.route('/forbidden', strict_slashes=False)
 def forbidden_handler() -> str:
     """ Raises a 403 error using abort
     """
-    abort(403)
+    return abort(403)
