@@ -2,7 +2,7 @@
 """
 API authentication module
 """
-from flask import request
+
 from typing import List, TypeVar
 
 
@@ -22,8 +22,14 @@ class Auth:
 
         # Check if path is in excluded_paths
         for excluded_path in excluded_paths:
-            if path.startswith(excluded_path):
+            if excluded_path.endswith('*'):
+                prefix = excluded_path[:-1]
+                if path.startswith(prefix):
+                    return False
+            elif path == excluded_path:
                 return False
+            # if path.startswith(excluded_path):
+            #     return False
 
         return True
 
