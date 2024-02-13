@@ -47,21 +47,21 @@ def before_request() -> Union[str, None]:
 
 
 @app.errorhandler(401)
-def unauthorized_error_handler(error) -> tuple[Response, int]:
+def unauthorized_error_handler(error: Exception) -> tuple[Response, int]:
     """ Unauthorized error handler
     """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_error_handler(error) -> tuple[Response, int]:
+def forbidden_error_handler(error: Exception) -> tuple[Response, int]:
     """ Forbidden error handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
 
 @app.errorhandler(404)
-def not_found(error) -> tuple[Response, int]:
+def not_found(error: Exception) -> tuple[Response, int]:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
