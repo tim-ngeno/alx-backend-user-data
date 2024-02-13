@@ -11,6 +11,10 @@ class BasicAuth(Auth):
     Basic authentication
     """
 
+    def __init__(self):
+        """Initializes BasicAuth class"""
+        super().__init__()
+
     def extract_base64_authorization_header(
             self, authorization_header:  str) -> Union[str, None]:
         """ Returns the Base64 part of the Authorization header for
@@ -47,7 +51,7 @@ class BasicAuth(Auth):
                 base64_authorization_header)
             decoded_string = decoded_bytes.decode('utf-8')
             return decoded_string
-        except Exception as e:
+        except Exception:
             return None
 
     def extract_user_credentials(
@@ -80,5 +84,31 @@ class BasicAuth(Auth):
         for user in users:
             if user.is_valid_password(user_pwd):
                 return user
-
         return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Retrieves a User instance for a request
+        """
+        if request is None:
+            return None
+        auth_header = self.authorization_header(request)
+        if auth_header is None:
+            return None
+
+        credentials = self.extract_base64_authorization_header(
+            auth_header)
+        if credentials is None:
+            return None
+
+        decoded_credentials = self.decode_base64_authorization_header(
+            credentials)
+        if decoded_credentials is None:
+            return None
+
+        user_email, user_pwd = self.extract_user_credentials(
+            decoded_credentials)
+        if user_email is None or user_pwd is None:
+            return None
+
+        return self.user_object_from_credentials(user_email, user_pwd)

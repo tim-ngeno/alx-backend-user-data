@@ -34,7 +34,7 @@ def before_request() -> Union[str, None]:
 
     excluded_paths = [
         '/api/v1/status/', '/api/v1/unauthorized/',
-        '/api/v1/forbidden/', '/api/v1/users'
+        '/api/v1/forbidden/',
     ]
     if request.path not in excluded_paths:
         return None
