@@ -41,9 +41,9 @@ def before_request() -> Union[str, None]:
     if not auth.require_auth(request.path, excluded_paths):
         return None
     if auth.authorization_header(request) is None:
-        abort(401)
+        return abort(401)
     if auth.current_user(request) is None:
-        abort(403)
+        return abort(403)
 
 
 @app.errorhandler(401)
