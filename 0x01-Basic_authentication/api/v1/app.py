@@ -6,6 +6,7 @@ from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request, Response
 from flask_cors import (CORS, cross_origin)
+from typing import Union
 import os
 
 
@@ -25,20 +26,20 @@ if auth_type:
 
 
 @app.before_request
-def before_request() -> str:
+def before_request() -> Union[str, None]:
     """ Handler for before each request
     """
     if auth is None:
-        return
+        return None
 
     excluded_paths = [
         '/api/v1/status/', '/api/v1/unauthorized/',
         '/api/v1/forbidden/', '/api/v1/users'
     ]
     if request.path not in excluded_paths:
-        return
+        return None
     if not auth.require_auth(request.path, excluded_paths):
-        return
+        return None
     if auth.authorization_header(request) is None:
         abort(401)
     if auth.current_user(request) is None:
@@ -46,21 +47,21 @@ def before_request() -> str:
 
 
 @app.errorhandler(401)
-def unauthorized_error_handler(error) -> Response:
+def unauthorized_error_handler(error) -> tuple[Response, int]:
     """ Unauthorized error handler
     """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
-def forbidden_error_handler(error) -> Response:
+def forbidden_error_handler(error) -> tuple[Response, int]:
     """ Forbidden error handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
 
 @app.errorhandler(404)
-def not_found(error) -> Response:
+def not_found(error) -> tuple[Response, int]:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
