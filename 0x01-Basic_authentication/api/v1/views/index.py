@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Module of Index views
 """
-from flask import jsonify, abort, Response
+from flask import jsonify, abort
 from api.v1.views import app_views
 
 
@@ -38,3 +38,19 @@ def forbidden_handler() -> str:
     """ Raises a 403 error using abort
     """
     return abort(403)
+
+
+class Response:
+    """ Class Response module """
+
+    def __init__(self, status_code, data):
+        """ Initializes the class Response """
+        self.status_code = status_code
+        self.data = data
+
+    def _get_data_for_json(self):
+        """ Get suitable data for JSON serialization """
+        return {
+            "status_code": self.status_code,
+            "data": self.data
+        }
