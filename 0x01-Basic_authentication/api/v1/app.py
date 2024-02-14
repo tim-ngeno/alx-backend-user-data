@@ -71,6 +71,22 @@ def not_found(error: Exception) -> tuple[Response, int]:
     return jsonify({"error": "Not found"}), 404
 
 
+class Response:
+    """ Class Response module """
+
+    def __init__(self, status_code, data):
+        """ Initializes the class Response """
+        self.status_code = status_code
+        self.data = data
+
+    def _get_data_for_json(self):
+        """ Get suitable data for JSON serialization """
+        return {
+            "status_code": self.status_code,
+            "data": self.data
+        }
+
+
 if __name__ == "__main__":
     host = os.getenv("API_HOST", "0.0.0.0")
     port = os.getenv("API_PORT", 5000)
