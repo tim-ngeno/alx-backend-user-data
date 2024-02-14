@@ -27,7 +27,8 @@ if auth_type:
 
 @app.before_request
 def before_request() -> Union[str, None]:
-    """ Handler for before each request
+    """
+    Handler for before each request
     """
     if auth is None:
         return None
@@ -48,21 +49,24 @@ def before_request() -> Union[str, None]:
 
 @app.errorhandler(401)
 def unauthorized_error_handler(error: Exception) -> tuple[Response, int]:
-    """ Unauthorized error handler
+    """
+    Unauthorized error handler
     """
     return jsonify({"error": "Unauthorized"}), 401
 
 
 @app.errorhandler(403)
 def forbidden_error_handler(error: Exception) -> tuple[Response, int]:
-    """ Forbidden error handler
+    """
+    Forbidden error handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
 
 @app.errorhandler(404)
 def not_found(error: Exception) -> tuple[Response, int]:
-    """ Not found handler
+    """
+    Not found handler
     """
     return jsonify({"error": "Not found"}), 404
 
