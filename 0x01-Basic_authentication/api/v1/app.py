@@ -13,8 +13,8 @@ import os
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
 auth = None
+
 auth_type = os.getenv('AUTH_TYPE')
 if auth_type:
     if auth_type == 'Auth':
@@ -71,7 +71,7 @@ def not_found(error: Exception) -> tuple[Response, int]:
     return jsonify({"error": "Not found"}), 404
 
 
-class Response:
+class MyResponse:
     """ Class Response module """
 
     def __init__(self, status_code, data):
