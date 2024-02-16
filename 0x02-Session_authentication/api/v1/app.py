@@ -38,13 +38,15 @@ def before_request() -> Union[str, None]:
 
     excluded_paths = [
         '/api/v1/status/', '/api/v1/unauthorized/',
-        '/api/v1/forbidden/',
+        '/api/v1/forbidden/', '/api/v1/auth_session/login/'
     ]
     if request.path not in excluded_paths:
         return None
     if not auth.require_auth(request.path, excluded_paths):
         return None
     if auth.authorization_header(request) is None:
+        return abort(401)
+    if auth.session_cookie(request) is None:
         return abort(401)
     if auth.current_user(request) is None:
         return abort(403)
