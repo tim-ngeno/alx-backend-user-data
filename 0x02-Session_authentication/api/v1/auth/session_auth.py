@@ -3,7 +3,6 @@
 
 from .auth import Auth
 from models.user import User
-from typing import TypeVar
 import uuid
 
 
@@ -31,20 +30,20 @@ class SessionAuth(Auth):
             return None
         return self.user_id_by_session_id.get(session_id)
 
-    def current_user(self, request=None) -> User:
-        """
-        Returns a User instance based on a cookie value
-        """
-        if request is None:
-            return None
+    # def current_user(self, request=None) -> User:
+    #     """
+    #     Returns a User instance based on a cookie value
+    #     """
+    #     if request is None:
+    #         return None
 
-        session_cookie = self.session_cookie(request)
-        if session_cookie is None:
-            return None
+    #     session_cookie = self.session_cookie(request)
+    #     if session_cookie is None:
+    #         return None
 
-        user_id = self.user_id_for_session_id(session_cookie)
-        if user_id is None:
-            return None
+    #     user_id = self.user_id_for_session_id(session_cookie)
+    #     if user_id is None:
+    #         return None
 
-        user = User.get(user_id)
-        return user
+    #     user = User.get(user_id)
+    #     return user
