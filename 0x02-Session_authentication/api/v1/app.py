@@ -4,6 +4,7 @@ Route module for the API
 """
 
 from api.v1.views import app_views
+from api.v1.auth.session_auth import SessionAuth
 from flask import Flask, jsonify, abort, g, request, Response
 from flask_cors import (CORS, cross_origin)
 from typing import Union
@@ -20,6 +21,8 @@ if auth_type:
     if auth_type == 'Auth':
         from api.v1.auth.auth import Auth
         auth = Auth()
+    elif auth_type == 'session_auth':
+        auth = SessionAuth()
     else:
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
