@@ -48,7 +48,7 @@ def before_request() -> Union[str, None]:
 
 
 @app.errorhandler(401)
-def unauthorized_error_handler(error: Exception) -> tuple[Response, int]:
+def unauthorized_error_handler(error) -> tuple[Response, int]:
     """
     Unauthorized error handler
     """
@@ -56,7 +56,7 @@ def unauthorized_error_handler(error: Exception) -> tuple[Response, int]:
 
 
 @app.errorhandler(403)
-def forbidden_error_handler(error: Exception) -> tuple[Response, int]:
+def forbidden_error_handler(error) -> tuple[Response, int]:
     """
     Forbidden error handler
     """
@@ -64,27 +64,11 @@ def forbidden_error_handler(error: Exception) -> tuple[Response, int]:
 
 
 @app.errorhandler(404)
-def not_found(error: Exception) -> tuple[Response, int]:
+def not_found(error) -> tuple[Response, int]:
     """
     Not found handler
     """
     return jsonify({"error": "Not found"}), 404
-
-
-class MyResponse:
-    """ Class Response module """
-
-    def __init__(self, status_code, data):
-        """ Initializes the class Response """
-        self.status_code = status_code
-        self.data = data
-
-    def _get_data_for_json(self):
-        """ Get suitable data for JSON serialization """
-        return {
-            "status_code": self.status_code,
-            "data": self.data
-        }
 
 
 if __name__ == "__main__":
