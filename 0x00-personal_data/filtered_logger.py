@@ -5,21 +5,20 @@ import logging
 import mysql.connector
 import os
 import re
-from typing import Tuple, Dict, Any
 
 # Define PII_FIELDS constant
-PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone", "ssn", "password")
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 class RedactingFormatter(logging.Formatter):
     """
     Redacting Formatter class
     """
-    REDACTION: str = "***"
-    FORMAT: str = "[HOLBERTON] %(name)s %(levelname)s %(asctime)s-15s: %(message)s"
-    SEPARATOR: str = ";"
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)s-15s: %(message)s"
+    SEPARATOR = ";"
 
-    def __init__(self, fields: Tuple[str, ...]) -> None:
+    def __init__(self, fields: tuple):
         """ Initializes the RedactingFormatter class """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
@@ -31,13 +30,13 @@ class RedactingFormatter(logging.Formatter):
             self.fields, self.REDACTION, message, self.SEPARATOR)
 
 
-def filter_datum(fields: Tuple[str, ...], redaction: str, message: str,
+def filter_datum(fields: tuple, redaction: str, message: str,
                  separator: str) -> str:
     """
     Returns an obfuscated version of the log message
 
     Args:
-        fields (Tuple[str, ...]): Represents all the fields to be obfuscated
+        fields (List[str]): Represents all the fields to be obfuscated
         redaction (str): string representation of the obfuscation text
         message (str): represents the log line
         separator (str): the character that separates all fields in the
@@ -72,19 +71,19 @@ def get_logger() -> logging.Logger:
     return user_data
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db():
     """
     Returns a connection to the MySQL database using the credentials
     stored in the environment variables
     """
-    username: str = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    password: str = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    host: str = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    dbname: str = os.getenv("PERSONAL_DATA_DB_NAME")
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    dbname = os.getenv("PERSONAL_DATA_DB_NAME")
 
     # Connect with mysql database
     try:
-        db: mysql.connector.connection.MySQLConnection = mysql.connector.connect(
+        db = mysql.connector.connect(
             host=host, user=username, password=password, database=dbname
         )
         return db
@@ -92,7 +91,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         print('Error connecting to DB: ', err)
 
 
-def main() -> None:
+def main():
     """
     Main function to retrieve and filter data from the users table
     """
@@ -101,24 +100,21 @@ def main() -> None:
         level=logging.INFO,
         format='[HOLBERTON] user_data %(levelname)s %(asctime)s: %(message)s')
     # Obtain database connection
-    db_connection: mysql.connector.connection.MySQLConnection = get_db()
+    db_connection = get_db()
 
     # Retrieve all rows from users table
-    cursor: mysql.connector.cursor.MySQLCursor = db_connection.cursor(
-        dictionary=False)
+    cursor = db_connection.cursor(dictionary=False)
     cursor.execute('SELECT * FROM users')
-    rows: Tuple[Dict[str, Any], ...] = cursor.fetchall()
+    rows = cursor.fetchall()
 
     for row in rows:
-        filtered_row: Dict[str, Any] = {
-            key: '***' if key in PII_FIELDS else value
-            for key, value in row.items()
-        }
+        filtered_row = {key: '***' if key in PII_FIELDS else value for
+                        key, value in row.items()}
         logging.info(filtered_row)
 
-    # Close cursor and database connection
-    cursor.close()
-    db_connection.close()
+        # Close cursor and database connection
+        cursor.close()
+        db_connection.close()
 
 
 if __name__ == "__main__":
