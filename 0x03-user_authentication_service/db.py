@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from typing import Any, Dict
+from typing import Any
 
 from user import Base, User
 
@@ -46,12 +46,12 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict[Any, Any]) -> User:
+    def find_user_by(self, **kwargs: Any) -> User:
         """
         Finds the first user matching the provided arguments
         """
         try:
-            user = self.__session.query(User).filter_by(**kwargs).first()
+            user = self._session.query(User).filter_by(**kwargs).first()
             if user is None:
                 raise NoResultFound('Not found')
             return user
