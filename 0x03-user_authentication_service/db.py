@@ -56,4 +56,4 @@ class DB:
                 raise NoResultFound('Not found')
             return user
         except InvalidRequestError:
-            raise InvalidRequestError('Invalid')
+            raise
