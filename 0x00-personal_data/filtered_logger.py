@@ -43,13 +43,8 @@ def filter_datum(fields: tuple, redaction: str, message: str,
             log line
     """
     for field in fields:
-        pattern = r'(?<={}){}=[^{}]+(?={})'.format(
-            re.escape(separator), re.escape(field),
-            separator, re.escape(re.escape(separator))
-        )
-        message = re.sub(pattern, '{}={}', message).format(
-            field, redaction)
-
+        regex = f'{field}=[^{separator}]*'
+        message = re.sub(regex, f'{field}={redaction}', message)
     return message
 
 
