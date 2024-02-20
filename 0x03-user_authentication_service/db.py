@@ -48,6 +48,9 @@ class DB:
     def find_user_by(self, **kwargs: Any) -> User:
         """
         Finds the first user matching the provided arguments
+
+        Args:
+            kwargs (int): keyword arguments representing user attributes
         """
         try:
             user = self._session.query(User).filter_by(**kwargs).first()
@@ -56,3 +59,24 @@ class DB:
             return user
         except InvalidRequestError:
             raise
+
+    def update_user(self, user_id: int, **kwargs: Any) -> None:
+        """
+        Updates a user's attributes and commits changes to the database
+
+        Args:
+            user_id (int): The ID of the user to update
+            **kwargs: keyword arguments representing user attributes
+        """
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise ValueError
+
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError
+
+        self._session.commit()
