@@ -4,7 +4,6 @@
 from flask import abort, Flask, jsonify, make_response, request, Response
 from auth import Auth
 
-
 app = Flask(__name__)
 AUTH = Auth()
 
@@ -30,7 +29,7 @@ def users() -> tuple[Response, int]:
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
-def login() -> Response:
+def login() -> str:
     """ Creates a new session for the user and stores it in a session ID
     """
     email = request.form.get('email')
