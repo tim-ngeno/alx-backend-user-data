@@ -47,5 +47,7 @@ class Auth:
                 return bcrypt.checkpw(
                     password.encode('utf-8'),
                     user.hashed_password.encode('utf-8'))
+            else:
+                return False
         except Exception:
             return False
