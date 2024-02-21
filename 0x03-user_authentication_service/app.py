@@ -1,7 +1,8 @@
+# !/usr/bin/env python3
+""" A basic Flask App """
+
 from flask import abort, Flask, jsonify, make_response, request
 from auth import Auth
-x  # !/usr/bin/env python3
-""" A basic Flask App """
 
 
 app = Flask(__name__)
