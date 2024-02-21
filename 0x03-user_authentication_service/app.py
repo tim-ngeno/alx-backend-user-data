@@ -59,7 +59,7 @@ def logout() -> str:
         AUTH.destroy_session(user.id)
         return redirect('/')
     else:
-        return 'Forbidden', 403
+        return jsonify({'error': 'Forbidden'}), 403
 
 
 if __name__ == "__main__":
