@@ -17,8 +17,8 @@ def index() -> Response:
 @app.route('/users', methods=['POST'], strict_slashes=False)
 def users() -> tuple[Response, int]:
     """ End point to register a user """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = str(request.form.get('email'))
+    password = str(request.form.get('password'))
 
     try:
         user = AUTH.register_user(email=email, password=password)
