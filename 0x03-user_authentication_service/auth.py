@@ -81,3 +81,11 @@ class Auth:
         if user is None:
             return None
         return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """Updates the corresponding user's ID to None
+        """
+        user = self._db.find_user_by(user_id=user_id)
+        if user is not None:
+            user_id = None
+        return None
