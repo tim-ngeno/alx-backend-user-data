@@ -51,7 +51,7 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
+def logout() -> Response:
     """Log out a user from a session"""
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
@@ -60,6 +60,18 @@ def logout() -> str:
         return redirect('/')
     else:
         return jsonify({'error': 'Forbidden'}), 403
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile() -> Response:
+    """ Returns the user profile if the user exists
+    """
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            return jsonify({'email': user.email}), 200
+    return abort(403)
 
 
 if __name__ == "__main__":
