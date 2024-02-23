@@ -45,6 +45,19 @@ class DB:
         self._session.commit()
         return user
 
+    def _add_user(self, email: str, hashed_password: str) -> User:
+        """
+        Saves the User to the database
+
+        Args:
+            email (str): The user email address
+            hashed_password (str): The user encrypted password
+        """
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
+
     def find_user_by(self, **kwargs: Any) -> User:
         """
         Finds the first user matching the provided arguments
