@@ -10,7 +10,7 @@ AUTH = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def index() -> str:
+def index() -> tuple[Response, int]:
     """ A simple flask method """
     return jsonify({'message': 'Bienvenue'}), 200
 
