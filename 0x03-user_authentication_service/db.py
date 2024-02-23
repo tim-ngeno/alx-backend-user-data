@@ -39,19 +39,9 @@ class DB:
         Args:
             email (str): The user email address
             hashed_password (str): The user encrypted password
-        """
-        user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
-        return user
 
-    def _add_user(self, email: str, hashed_password: str) -> User:
-        """
-        Saves the User to the database
-
-        Args:
-            email (str): The user email address
-            hashed_password (str): The user encrypted password
+        Returns:
+            User: A user object created and added to the database
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
